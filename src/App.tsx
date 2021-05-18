@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react';
 import './App.css';
+import {MonobankService} from "./service";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [token, setToken] = useState("");
+    const [name, setName] = useState("");
+    useEffect(() => {
+        if (token.length > 40) {
+            new MonobankService(token)
+                .getPersonalInfo()
+                .then(pi => setName(pi.name))
+                .catch((reason => setName(reason.name)))
+        }
+    });
+    return (
+        <div className="App">
+            <label htmlFor="token">Token</label>
+            <input
+                type="text"
+                name="token"
+                value={token}
+                onChange={(event) => setToken(event.target.value)}
+            />
+            <p>Detected name: {name}</p>
+        </div>
+    );
 }
 
 export default App;
