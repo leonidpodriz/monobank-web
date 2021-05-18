@@ -19,6 +19,25 @@ interface IPersonalInfo {
     accounts: IAccount[];
 }
 
+
+interface IStatement {
+    id: string;
+    time: number;
+    description: string;
+    mcc: number;
+    hold: boolean;
+    amount: number;
+    operationAmount: number;
+    currencyCode: number;
+    commissionRate: number;
+    cashbackAmount: number;
+    balance: number;
+    comment: string;
+    receiptId: string;
+    counterEdrpou: string;
+    counterIban: string;
+}
+
 export class MonobankService {
     BASE_URL: string = "https://api.monobank.ua";
     token: string;
@@ -60,7 +79,7 @@ export class MonobankService {
         return response.data;
     }
 
-    async getStatements(account_id: string, from: Date, to: Date): Promise<IPersonalInfo> {
+    async getStatements(account_id: string, from: Date, to: Date): Promise<IStatement[]> {
         const from_timestamp: number = + from;
         const to_timestamp: number = + to;
 
@@ -70,7 +89,7 @@ export class MonobankService {
             throw Error(`Destination date should be bigger than start date!`);
         }
 
-        const response = await this.get<IPersonalInfo>(
+        const response = await this.get<IStatement[]>(
             `/personal/statement/{${account_id}/{${from_timestamp}/{${to_timestamp}`
         );
         return response.data;
