@@ -74,7 +74,7 @@ export class MonobankService {
     }
 
     // Monobank methods
-    async getPersonalInfo() {
+    async getPersonalInfo(): Promise<IPersonalInfo> {
         const response = await this.get<IPersonalInfo>("/personal/client-info");
         return response.data;
     }
